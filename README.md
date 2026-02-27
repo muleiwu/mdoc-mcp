@@ -1,15 +1,17 @@
+English | [简体中文](README.zh-CN.md)
+
 # mdoc-mcp
 
-[mdoc](https://mdoc.cc) 的 MCP (Model Context Protocol) Server，让 AI 能够直接读取 mdoc 文档的目录结构和文章内容。
+An MCP (Model Context Protocol) Server for [mdoc](https://mdoc.cc), enabling AI to directly read the table of contents and article content from mdoc documentation.
 
-## 功能
+## Features
 
-- **`get_manifest`** — 获取文档目录清单（Markdown 格式），包含所有文章的层级结构和链接
-- **`get_article_content`** — 获取文章的原始 Markdown 内容
+- **`get_manifest`** — Retrieve the document manifest (Markdown format), including the hierarchical structure and links of all articles
+- **`get_article_content`** — Retrieve the raw Markdown content of an article
 
-## 安装与配置
+## Installation & Configuration
 
-### 1. 克隆并构建
+### 1. Clone and Build
 
 ```bash
 git clone https://github.com/muleiwu/mdoc-mcp.git
@@ -18,15 +20,15 @@ npm install
 npm run build
 ```
 
-### 2. 配置 API Key
+### 2. Configure API Key
 
-在 [mdoc](https://mdoc.cc) 用户设置页面创建 API Key，获取 `AccessKeyID` 和 `SecretAccessKey`。
+Create an API Key on the [mdoc](https://mdoc.cc) user settings page to obtain your `AccessKeyID` and `SecretAccessKey`.
 
-鉴权使用 AWS Signature Version 4 协议，与服务端完全兼容。
+Authentication uses the AWS Signature Version 4 protocol, fully compatible with the server.
 
-### 3. 在 Cursor / Claude Desktop 中配置
+### 3. Configure in Cursor / Claude Desktop
 
-编辑 MCP 配置文件（如 `~/.cursor/mcp.json` 或 Claude Desktop 的配置），添加：
+Edit the MCP configuration file (e.g. `~/.cursor/mcp.json` or the Claude Desktop config) and add:
 
 ```json
 {
@@ -46,60 +48,60 @@ npm run build
 }
 ```
 
-如果使用私有部署的 mdoc，额外添加：
+For a self-hosted mdoc instance, additionally add:
 
 ```json
 "MDOC_API_BASE_URL": "https://your-mdoc-instance.com"
 ```
 
-## 工具说明
+## Tools
 
-### `get_manifest` — 获取文档目录
+### `get_manifest` — Get Document Manifest
 
-获取文档的完整目录清单，AI 可据此了解文档结构并选择要读取的文章。
+Retrieves the full table of contents for a document. AI can use this to understand the document structure and select articles to read.
 
-**参数**（提供 `url` 或 `orgSlug` + `docSlug` 之一）：
+**Parameters** (provide either `url` or `orgSlug` + `docSlug`):
 
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| `url` | string (可选) | mdoc 网址，如 `https://mdoc.cc/mliev/1ms` 或带版本 `https://mdoc.cc/mliev/1ms/v1.0.0` |
-| `orgSlug` | string (可选) | 组织标识，如 `mliev` |
-| `docSlug` | string (可选) | 文档标识，如 `1ms` |
-| `version` | string (可选) | 版本名称，如 `v1.0.0`，不指定则使用默认版本 |
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `url` | string (optional) | mdoc URL, e.g. `https://mdoc.cc/mliev/1ms` or with version `https://mdoc.cc/mliev/1ms/v1.0.0` |
+| `orgSlug` | string (optional) | Organization identifier, e.g. `mliev` |
+| `docSlug` | string (optional) | Document identifier, e.g. `1ms` |
+| `version` | string (optional) | Version name, e.g. `v1.0.0`. Uses the default version if not specified. |
 
-**返回**：Markdown 格式的文档目录，包含文章链接（可直接用于 `get_article_content`）
+**Returns**: The document table of contents in Markdown format, including article links (usable directly with `get_article_content`)
 
-### `get_article_content` — 获取文章内容
+### `get_article_content` — Get Article Content
 
-获取指定文章的原始 Markdown 内容。
+Retrieves the raw Markdown content of a specified article.
 
-**参数**（提供 `url` 或 `orgSlug` + `docSlug` + `articleId` 之一）：
+**Parameters** (provide either `url` or `orgSlug` + `docSlug` + `articleId`):
 
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| `url` | string (可选) | 网址或 manifest 中的 content.md 链接 |
-| `orgSlug` | string (可选) | 组织标识 |
-| `docSlug` | string (可选) | 文档标识 |
-| `articleId` | string (可选) | 文章 ID |
-| `version` | string (可选) | 版本名称 |
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `url` | string (optional) | Article URL or a content.md link from the manifest |
+| `orgSlug` | string (optional) | Organization identifier |
+| `docSlug` | string (optional) | Document identifier |
+| `articleId` | string (optional) | Article ID |
+| `version` | string (optional) | Version name |
 
-支持的 `url` 格式：
-- `https://mdoc.cc/mliev/1ms/v1.0.0/16`（mdoc 网址，第 4 段为 articleId）
-- `https://mdoc.cc/openapi/organizations/mliev/documents/1ms/articles/16/content.md`（manifest 返回的 API 链接）
+Supported `url` formats:
+- `https://mdoc.cc/mliev/1ms/v1.0.0/16` (mdoc URL where the 4th segment is the articleId)
+- `https://mdoc.cc/openapi/organizations/mliev/documents/1ms/articles/16/content.md` (API link returned by the manifest)
 
-## 典型使用流程
+## Typical Workflow
 
-1. AI 调用 `get_manifest` 获取文档目录
-2. 从目录中找到相关文章的链接
-3. AI 调用 `get_article_content` 读取具体文章内容
+1. AI calls `get_manifest` to retrieve the document table of contents
+2. Locate the relevant article link from the manifest
+3. AI calls `get_article_content` to read the specific article content
 
-## 环境变量
+## Environment Variables
 
-| 变量 | 必需 | 默认值 | 说明 |
-|------|------|--------|------|
-| `MDOC_ACCESS_KEY_ID` | 是 | — | API Key 的 Access Key ID |
-| `MDOC_SECRET_ACCESS_KEY` | 是 | — | API Key 的 Secret Access Key |
-| `MDOC_API_BASE_URL` | 否 | `https://mdoc.cc` | API 基础地址（私有部署时使用） |
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `MDOC_ACCESS_KEY_ID` | Yes | — | Access Key ID of the API Key |
+| `MDOC_SECRET_ACCESS_KEY` | Yes | — | Secret Access Key of the API Key |
+| `MDOC_API_BASE_URL` | No | `https://mdoc.cc` | API base URL (for self-hosted instances) |
 
 ## License
 
