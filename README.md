@@ -32,8 +32,11 @@ npm run build
 {
   "mcpServers": {
     "mdoc": {
-      "command": "node",
-      "args": ["/path/to/mdoc-mcp/dist/index.js"],
+      "command": "npx",
+      "args": [
+        "-y",
+        "@muleiwu/mdoc-mcp"
+      ],
       "env": {
         "MDOC_ACCESS_KEY_ID": "your_access_key_id",
         "MDOC_SECRET_ACCESS_KEY": "your_secret_access_key"
