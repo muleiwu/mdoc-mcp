@@ -20,11 +20,9 @@ npm install
 npm run build
 ```
 
-### 2. 配置 API Key
+### 2. 配置个人访问令牌
 
-在 [mdoc](https://mdoc.cc) 用户设置页面创建 API Key，获取 `AccessKeyID` 和 `SecretAccessKey`。
-
-鉴权使用 AWS Signature Version 4 协议，与服务端完全兼容。
+在 [mdoc](https://mdoc.cc) 用户设置页面创建个人访问令牌（PAT），令牌格式为 `mdoc_pat_*`。
 
 ### 3. 在 Cursor / Claude Desktop 中配置
 
@@ -40,8 +38,7 @@ npm run build
         "@muleiwu/mdoc-mcp"
       ],
       "env": {
-        "MDOC_ACCESS_KEY_ID": "your_access_key_id",
-        "MDOC_SECRET_ACCESS_KEY": "your_secret_access_key"
+        "MDOC_ACCESS_TOKEN": "mdoc_pat_your_token_here"
       }
     }
   }
@@ -99,8 +96,7 @@ npm run build
 
 | 变量 | 必需 | 默认值 | 说明 |
 |------|------|--------|------|
-| `MDOC_ACCESS_KEY_ID` | 是 | — | API Key 的 Access Key ID |
-| `MDOC_SECRET_ACCESS_KEY` | 是 | — | API Key 的 Secret Access Key |
+| `MDOC_ACCESS_TOKEN` | 是 | — | 个人访问令牌（格式：`mdoc_pat_*`） |
 | `MDOC_API_BASE_URL` | 否 | `https://mdoc.cc` | API 基础地址（私有部署时使用） |
 
 ## License

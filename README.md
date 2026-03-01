@@ -20,11 +20,9 @@ npm install
 npm run build
 ```
 
-### 2. Configure API Key
+### 2. Configure Personal Access Token
 
-Create an API Key on the [mdoc](https://mdoc.cc) user settings page to obtain your `AccessKeyID` and `SecretAccessKey`.
-
-Authentication uses the AWS Signature Version 4 protocol, fully compatible with the server.
+Create a Personal Access Token (PAT) on the [mdoc](https://mdoc.cc) user settings page. The token format is `mdoc_pat_*`.
 
 ### 3. Configure in Cursor / Claude Desktop
 
@@ -40,8 +38,7 @@ Edit the MCP configuration file (e.g. `~/.cursor/mcp.json` or the Claude Desktop
         "@muleiwu/mdoc-mcp"
       ],
       "env": {
-        "MDOC_ACCESS_KEY_ID": "your_access_key_id",
-        "MDOC_SECRET_ACCESS_KEY": "your_secret_access_key"
+        "MDOC_ACCESS_TOKEN": "mdoc_pat_your_token_here"
       }
     }
   }
@@ -99,8 +96,7 @@ Supported `url` formats:
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `MDOC_ACCESS_KEY_ID` | Yes | — | Access Key ID of the API Key |
-| `MDOC_SECRET_ACCESS_KEY` | Yes | — | Secret Access Key of the API Key |
+| `MDOC_ACCESS_TOKEN` | Yes | — | Personal Access Token (format: `mdoc_pat_*`) |
 | `MDOC_API_BASE_URL` | No | `https://mdoc.cc` | API base URL (for self-hosted instances) |
 
 ## License
