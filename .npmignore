@@ -1,0 +1,5 @@
+.claude/
+.env*
+src/
+tsconfig.json
+*.tgz
