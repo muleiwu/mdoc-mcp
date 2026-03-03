@@ -1,6 +1,6 @@
 {
   "name": "@muleiwu/mdoc-mcp",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "MCP server for mdoc document reading via OpenAPI",
   "type": "module",
   "main": "dist/index.js",

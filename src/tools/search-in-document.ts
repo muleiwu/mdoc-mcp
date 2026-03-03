@@ -16,7 +16,8 @@ interface SearchArticleResult {
   title: string;
   score: number;
   content: string;
-  content_url: string;
+  markdown_url: string;
+  browser_url: string;
 }
 
 interface SearchApiResponse {
@@ -102,7 +103,8 @@ export async function searchInDocument(
     if (result.content) {
       lines.push(`- 摘要: ${result.content}`);
     }
-    lines.push(`- 内容链接: ${result.content_url}`);
+    lines.push(`- Markdown 全文 (需携带 token 调用，仅限 API 访问): ${result.markdown_url}`);
+    lines.push(`- 浏览器链接: ${result.browser_url}`);
     lines.push('');
   }
 
