@@ -5,6 +5,7 @@ import * as z from 'zod/v4';
 import { createClientFromEnv } from './client.js';
 import { getManifest } from './tools/get-manifest.js';
 import { getArticleContent } from './tools/get-article-content.js';
+import { searchInDocument } from './tools/search-in-document.js';
 
 const server = new McpServer({
   name: 'mdoc-mcp',
@@ -101,6 +102,66 @@ server.registerTool(
     try {
       const client = createClientFromEnv();
       const content = await getArticleContent(client, args);
+      return {
+        content: [{ type: 'text', text: content }],
+      };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      return {
+        content: [{ type: 'text', text: `错误: ${message}` }],
+        isError: true,
+      };
+    }
+  }
+);
+
+// Tool: search_in_document
+server.registerTool(
+  'search_in_document',
+  {
+    title: '文档语义搜索',
+    description:
+      '在 mdoc 文档中进行语义搜索，根据关键词查找最相关的文章。' +
+      '返回匹配文章的标题、相关度、内容摘要和链接。' +
+      '可以通过 mdoc.cc 网址或 orgSlug/docSlug 参数指定文档。' +
+      '示例网址格式：https://mdoc.cc/mliev/1ms 或 https://mdoc.cc/mliev/1ms/v1.0.0',
+    inputSchema: {
+      url: z
+        .string()
+        .optional()
+        .describe(
+          'mdoc 文档网址，如 https://mdoc.cc/mliev/1ms 或 https://mdoc.cc/mliev/1ms/v1.0.0。' +
+          '提供 url 时，orgSlug 和 docSlug 可省略。'
+        ),
+      orgSlug: z
+        .string()
+        .optional()
+        .describe('组织标识，如 mliev。当未提供 url 时必填。'),
+      docSlug: z
+        .string()
+        .optional()
+        .describe('文档标识，如 1ms。当未提供 url 时必填。'),
+      version: z
+        .string()
+        .optional()
+        .describe('版本名称，如 v1.0.0。不指定则使用文档默认版本。'),
+      query: z
+        .string()
+        .describe('搜索关键词，如「如何配置路由」'),
+      topK: z
+        .number()
+        .optional()
+        .describe('最大返回结果数，范围 1-20，默认 5。'),
+      minScore: z
+        .number()
+        .optional()
+        .describe('最小相似度阈值，范围 0-1，默认 0.5。'),
+    },
+  },
+  async (args) => {
+    try {
+      const client = createClientFromEnv();
+      const content = await searchInDocument(client, args);
       return {
         content: [{ type: 'text', text: content }],
       };
